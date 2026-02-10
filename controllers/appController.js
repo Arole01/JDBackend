@@ -1,5 +1,6 @@
 const userModel = require("../models/user")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 exports.homepage = (req,res) =>{
     try {
@@ -67,6 +68,42 @@ exports.createUser = async (req,res)=>{
     } catch (error){
         res.status(500).json({
             message: `Unable to create user`, 
+            error: error.message
+        })
+    }
+}
+
+
+exports.loginUser = async (req,res)=>{
+    try {
+        const {email, password} = req.body
+
+        const userExist = await userModel.findOne({email: email.trim().toLowerCase()})
+
+        if(!userExist){
+            return res.status(404).json({
+                message: `User not found`
+            })
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, userExist.password)
+
+        if(!isPasswordValid){
+            return res.status(400).json({
+                message: `Invalid password`
+            })
+        }
+        const token = jwt.sign({id: userExist._id}, "Adeola", {expiresIn: "1d"})
+
+        return res.status(200).json({
+            message: `Login successful`,
+            data: userExist,
+            token
+        }) 
+
+    } catch (error){
+        res.status(500).json({
+            message: `Unable to login user`, 
             error: error.message
         })
     }
