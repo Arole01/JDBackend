@@ -3,11 +3,13 @@ const Port = 3123;
 const {homepage} = require("./controllers/appController")
 const express = require("express")
 const router = require("./routers/appRouter")
+const productRouter = require("./routers/productRouter")
 const app = express()
 const mongoose = require("mongoose")
 app.use(express.json())
 
 app.use(router)
+app.use(productRouter)
 
 mongoose.connect(process.env.db).then(
     ()=>{console.log("DB connection established")
