@@ -89,7 +89,7 @@ exports.signUpTemplate=(otp,firstName)=>{
     `
 }
 exports.resendOtpTemplate = (newOtp, firstName) => {
-  return `
+    return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -164,7 +164,7 @@ exports.resendOtpTemplate = (newOtp, firstName) => {
             <div class="content">
                 <p>Hello ${firstName},</p>
                 <p>Here is your one-time password to complete your verification</p>
-               <div class="button-container">
+            <div class="button-container">
                 <p>Your new verification code is</p>
                     <p>${newOtp}</p>
                 </div>
@@ -178,13 +178,13 @@ exports.resendOtpTemplate = (newOtp, firstName) => {
     </body>
     </html>
     
-  
+
     `
 }
 
 
 exports.forgotPasswordTemplate = (otp, firstName) => {
-  return `
+    return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -258,9 +258,9 @@ exports.forgotPasswordTemplate = (otp, firstName) => {
             </div>
             <div class="content">
                 <p>Hello ${firstName},</p>
-                 <p>A reset password was requested on your account</p>
+                <p>A reset password was requested on your account</p>
                 <p>Please provide the one time password (o.t.p) below to reset your password</p>
-               <div class="button">
+            <div class="button">
                     ${otp}
                 </div>
                 <p>If you did not request to reset your password, kindly ignore this email.</p>
