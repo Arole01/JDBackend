@@ -51,6 +51,7 @@ exports.createUser = async (req,res)=>{
     //     })
     // }
 
+        const otp = Math.round(Math.random() * 1e6)
         const saltPassword = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, saltPassword)
         const userinfo = {
@@ -58,6 +59,7 @@ exports.createUser = async (req,res)=>{
             lastName: lastName.trim().charAt(0).toUpperCase() + lastName.trim().slice(1),
             password: hashPassword,
             email: email.trim().toLowerCase(),
+            otp
         }
 
 
@@ -75,7 +77,7 @@ exports.createUser = async (req,res)=>{
         sendEmail.to=[{email : user.email}]
         sendEmail.sender = {name:"Jersey Dynasty",email:"ajosedavidayobami@gmail.com"}
 
-        sendEmail.htmlContent = signUpTemplate(5437,user.firstName)
+        sendEmail.htmlContent = signUpTemplate(otp,user.firstName)
 
     await emailInstance.sendTransacEmail(sendEmail)
 
@@ -95,6 +97,11 @@ exports.loginUser = async (req,res)=>{
 
         const userExist = await userModel.findOne({email: email.trim().toLowerCase()})
 
+        if(!userExist.isVerified){
+            return res.status(400).json({
+                message: `Email not verified`
+            })
+        }
         // if(!userExist){
         //     return res.status(404).json({
         //         message: `User not found`
@@ -119,6 +126,35 @@ exports.loginUser = async (req,res)=>{
     } catch (error){
         res.status(500).json({
             message: `Unable to login user`, 
+            error: error.message
+        })
+    }
+}
+
+
+exports.verifyEmail = async (req,res)=>{
+    try {
+        const {email,otp} = req.body
+        const checkEmail = await userModel.findOne({email:email.trim().toLowerCase()})
+        if(!checkEmail){
+            return res.status(400).json({
+                message:"user not found"
+            })
+        }
+        if(otp !== checkEmail.otp){
+            return res.status(400).json({
+                message:"Otp invalid"
+            })
+        }
+
+        checkEmail.isVerified = true
+        checkEmail.save()
+        return res.status(200).json({
+            message:"Email successfully verified"
+        })
+    } catch (error) {
+        res.status(500).json({
+            messages:"Something went wrong",
             error: error.message
         })
     }
