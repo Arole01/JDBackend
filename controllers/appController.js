@@ -1,6 +1,9 @@
 const userModel = require("../models/user")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const brevo = require("@getbrevo/brevo")
+const {signUpTemplate} = require("../controllers/signUpEmail")
+
 
 exports.homepage = (req,res) =>{
     try {
@@ -42,11 +45,11 @@ exports.createUser = async (req,res)=>{
 
     const userExist = await userModel.findOne({email: email.trim().toLowerCase()})
 
-    if(userExist){
-        return res.status(400).json({
-            message: `User with email ${email} already exist`
-        })
-    }
+    // if(userExist){
+    //     return res.status(400).json({
+    //         message: `User with email ${email} already exist`
+    //     })
+    // }
 
         const saltPassword = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, saltPassword)
@@ -54,7 +57,7 @@ exports.createUser = async (req,res)=>{
             firstName: firstName.trim().charAt(0).toUpperCase() + firstName.trim().slice(1),
             lastName: lastName.trim().charAt(0).toUpperCase() + lastName.trim().slice(1),
             password: hashPassword,
-            email: email.trim().toLowerCase()
+            email: email.trim().toLowerCase(),
         }
 
 
@@ -63,6 +66,18 @@ exports.createUser = async (req,res)=>{
             message: `User created successfully`,
             data: user
         })
+        
+        const emailInstance = new brevo.TransactionalEmailsApi()
+        emailInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.brevoApiKey)
+
+        const sendEmail = new brevo.SendSmtpEmail()
+        sendEmail.subject = `Verify Your Email`
+        sendEmail.to=[{email : user.email}]
+        sendEmail.sender = {name:"Jersey Dynasty",email:"ajosedavidayobami@gmail.com"}
+
+        sendEmail.htmlContent = signUpTemplate(5437,user.firstName)
+
+    await emailInstance.sendTransacEmail(sendEmail)
 
 
     } catch (error){
@@ -80,19 +95,19 @@ exports.loginUser = async (req,res)=>{
 
         const userExist = await userModel.findOne({email: email.trim().toLowerCase()})
 
-        if(!userExist){
-            return res.status(404).json({
-                message: `User not found`
-            })
-        }
+        // if(!userExist){
+        //     return res.status(404).json({
+        //         message: `User not found`
+        //     })
+        // }
 
         const isPasswordValid = await bcrypt.compare(password, userExist.password)
 
-        if(!isPasswordValid){
-            return res.status(400).json({
-                message: `Invalid password`
-            })
-        }
+        // if(!isPasswordValid){
+        //     return res.status(400).json({
+        //         message: `Invalid password`
+        //     })
+        // }
         const token = jwt.sign({id: userExist._id}, "Adeola", {expiresIn: "1d"})
 
         return res.status(200).json({
