@@ -1,10 +1,12 @@
 const productModel = require("../models/product")
+const cloudinary = require("../Utils/cloudinary")
 
 
 exports.createProduct = async (req,res) =>{
     try {
         const {ProductName, Quantity, Description, Image, Category, Price} = req.body
 
+        const uploadImg = await cloudinary.uploader.upload()
         const newProduct = await productModel.create({
             ProductName, 
             Quantity, 
