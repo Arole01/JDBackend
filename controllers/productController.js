@@ -32,3 +32,25 @@ exports.createProduct = async (req,res) =>{
         })
     }
 }
+
+exports.getAllProducts = async (req,res) =>{
+    try {
+
+        const getAll = await productModel.find()
+        if(!getAll){
+            return res.status(400).json({
+                message: `No Product Found`
+            })
+        }
+
+        res.status(200).json({
+            message:"All product retrieved",
+            data:getAll
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
