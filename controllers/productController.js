@@ -77,3 +77,33 @@ exports.getAproduct = async (req,res) =>{
         })
     }
 }
+
+exports.updateProduct = async (req,res) =>{
+    try {
+
+        const {Price} = req.body
+
+        if(!Price){
+            return res.status(400).json({
+                message:"Kindly Input Price as a number"
+            })
+        }
+
+    const update = await productModel.findByIdAndUpdate(req.params.id,
+        {
+            Price:Price
+        },
+        {new:true}
+        )
+
+        res.status(301).json({
+            message:"Product updated successfully",
+            data:update
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
