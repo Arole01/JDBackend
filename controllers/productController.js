@@ -54,3 +54,26 @@ exports.getAllProducts = async (req,res) =>{
         })
     }
 }
+
+
+exports.getAproduct = async (req,res) =>{
+    try {
+        const getOne = await productModel.findById(req.params.id)
+
+        if(!getOne){
+            return res.status(400).json({
+                message: `No Product Found`
+            })
+        }
+        
+        res.status(200).json({
+            message:"Product retrieved",
+            data:getOne
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
