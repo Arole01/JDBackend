@@ -2,10 +2,10 @@ const { createProduct, getAllProducts, getAproduct, updateProduct } = require(".
 const upload = require("../Utils/multer")
 
 const router = require("express").Router()
-const { authenticateUser } = require("../Utils/auth")
+const { authenticateUser, authorizeUser } = require("../Utils/auth")
 
 router.post("/addproduct", authenticateUser, upload.single("Image"), createProduct)
 router.get("/getproducts", getAllProducts)
 router.get("/getproduct/:id", getAproduct)
-router.put("/updateproduct/:id",  updateProduct)
+router.put("/updateproduct/:id", authorizeUser, updateProduct)
 module.exports = router
