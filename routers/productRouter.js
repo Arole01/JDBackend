@@ -5,8 +5,8 @@ const router = require("express").Router()
 const { authenticateUser, authorizeUser } = require("../Utils/auth")
 const { productValidator } = require("../Utils/validator")
 
-router.post("/addproduct", authenticateUser,  upload.single("Image"), productValidator, createProduct)
-router.get("/getproducts", getAllProducts)
-router.get("/getproduct/:id", getAproduct)
-router.put("/updateproduct/:id", authorizeUser, updateProduct)
+router.post("/product", authenticateUser,  upload.single("Image"), productValidator, createProduct)
+router.get("/product", getAllProducts)
+router.get("/product/:id", getAproduct)
+router.put("/product/:id", authorizeUser, updateProduct)
 module.exports = router

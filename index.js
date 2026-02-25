@@ -9,7 +9,7 @@ const mongoose = require("mongoose")
 app.use(express.json())
 
 app.use(router)
-app.use(productRouter)
+app.use("/api", productRouter)
 
 mongoose.connect(process.env.db).then(
     ()=>{console.log("DB connection established")
