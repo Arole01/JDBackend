@@ -1,4 +1,5 @@
 require("dotenv").config()
+const cors = require("cors")
 const Port = 3123;
 const {homepage} = require("./controllers/appController")
 const express = require("express")
@@ -7,7 +8,7 @@ const productRouter = require("./routers/productRouter")
 const app = express()
 const mongoose = require("mongoose")
 app.use(express.json())
-
+app.use(cors())
 app.use(router)
 app.use("/api", productRouter)
 
