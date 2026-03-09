@@ -54,3 +54,7 @@ exports.updateCategory = async (req, res) => {
         res.status(500).json({message: error.message})
     }
 }
+
+exports.deleteCategory = async (req, res) => {
+    try {
+        const category = await categoryModel.findByIdAndDelete(req.params.id)
