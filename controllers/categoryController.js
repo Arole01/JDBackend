@@ -21,4 +21,16 @@ exports.createCategory = async (req, res) => {
     }
 }
 
-exports.get
+exports.getAllCategories = async (req, res) => {
+    try {
+        const categories = await categoryModel.find()
+        res.status(200).json({message: "Categories retrieved successfully", data: categories})
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
+
+exports.getCategory = async (req, res) => {
+    try {
+        const category = await categoryModel.findById(req.params.id)
+    }
