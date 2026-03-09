@@ -42,7 +42,7 @@ exports.productValidator = async (req,res,next)=>{
             "string.min":"Product Name should have a minimum length of three",
             "string.required":"Product Name is required",
         }),
-        Qty: joi.number().required().messages({
+        Quantity: joi.number().required().messages({
             "number.base":"Quantity must be a number",
             "number.required":"Quantity is required",
         }),
@@ -59,8 +59,8 @@ exports.productValidator = async (req,res,next)=>{
             "number.base":"Price must be a number",
             "number.required":"Price is required",
             "string.required":"Price is required"
-        })
-        })
+        }),
+        Style: joi.string().valid("Retro", "Club", "National Team", "Kids", "Baseball", "Basketball").optional()
 
 const {error} = schema.validate(req.body)
 if(error){

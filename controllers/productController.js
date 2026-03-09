@@ -7,7 +7,7 @@ const fs = require("fs")
 exports.createProduct = async (req,res) =>{
     try {
         
-        const {ProductName, Quantity, Description, Image, Category, Price} = req.body
+        const {ProductName, Quantity, Description, Image, Category, Price, Style} = req.body
 
         const category = await categoryModel.findById(Category);
     if (!category) {
@@ -21,7 +21,8 @@ exports.createProduct = async (req,res) =>{
             Description, 
             Image:uploadImg.secure_url, 
             Category, 
-            Price
+            Price,
+            Style : Style || "Club"
         })
 
         

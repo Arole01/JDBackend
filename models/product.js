@@ -1,8 +1,8 @@
 const { required } = require("joi")
-const Mongoose = require("mongoose")
+const mongoose = require("mongoose")
 
 
-const productSchema = new Mongoose.Schema({
+const productSchema = new mongoose.Schema({
     ProductName: {
         type: String,
     },
@@ -27,11 +27,13 @@ const productSchema = new Mongoose.Schema({
 
     Price: {
         type: String,
+    },
+    Style: {
+        type: String,
+        enum: ["Retro", "Club", "National Team", "Kids", "Baseball", "Basketball", ], default: "Club"
     }
-
-
 }, {timestamps: true})
 
-const productModel = Mongoose.model("Product", productSchema)
+const productModel = mongoose.model("Product", productSchema)
 
 module.exports = productModel
