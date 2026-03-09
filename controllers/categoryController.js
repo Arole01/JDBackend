@@ -33,4 +33,24 @@ exports.getAllCategories = async (req, res) => {
 exports.getCategory = async (req, res) => {
     try {
         const category = await categoryModel.findById(req.params.id)
+        if (!category) {
+            return res.status(404).json({message: "Category not found"})
+        }
+        res.status(200).json({data: category})
+    } catch (error) {
+        res.status(500).json({message: error.message})
     }
+}
+
+exports.updateCategory = async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const category = await categoryModel.findByIdAndUpdate(req.params.id, { name, description }, { new: true })
+        if (!category) {
+            return res.status(404).json({message: "Category not found"})
+        }
+        res.status(200).json({message: "Category updated successfully", data: category})
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
