@@ -1,3 +1,4 @@
+const { required } = require("joi")
 const Mongoose = require("mongoose")
 
 
@@ -19,7 +20,9 @@ const productSchema = new Mongoose.Schema({
     },
 
     Category:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        required: true
     },
 
     Price: {
@@ -27,7 +30,7 @@ const productSchema = new Mongoose.Schema({
     }
 
 
-})
+}, {timestamps: true})
 
 const productModel = Mongoose.model("Product", productSchema)
 

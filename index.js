@@ -5,6 +5,7 @@ const {homepage} = require("./controllers/appController")
 const express = require("express")
 const router = require("./routers/appRouter")
 const productRouter = require("./routers/productRouter")
+const categoryRouter = require("./routers/categoryRouter")
 const app = express()
 const mongoose = require("mongoose")
 app.use(cors())
@@ -12,6 +13,7 @@ app.use(express.json())
 
 app.use(router)
 app.use("/api", productRouter)
+app.use("/api", categoryRouter)
 
 mongoose.connect(process.env.db).then(
     ()=>{console.log("DB connection established")
